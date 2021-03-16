@@ -2,11 +2,12 @@
   <v-app>
     <v-app-bar
       app
-      color="primary"
+      color="dark"
       dark
+      height="50"
     >
       <div class="d-flex align-center">
-        <v-img
+        <!-- <v-img
           alt="Vuetify Logo"
           class="shrink mr-2"
           contain
@@ -22,7 +23,7 @@
           min-width="100"
           src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
           width="100"
-        />
+        /> -->
       </div>
 
       <v-spacer></v-spacer>
@@ -32,25 +33,25 @@
         target="_blank"
         text
       >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
+        <span class="mr-2">Login</span>
+        <v-icon>mdi-login</v-icon>
       </v-btn>
     </v-app-bar>
 
     <v-main>
-      <HelloWorld/>
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+// import HelloWorld from './components/HelloWorld'
 
 export default {
   name: 'App',
 
   components: {
-    HelloWorld
+    // HelloWorld
   },
 
   data: () => ({

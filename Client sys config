@@ -1,0 +1,34 @@
+company name
+logo path
+company email 
+company phone
+system name
+version
+c person number
+c person email
+contact person
+location
+
+system status [active | deactive] -> set interval 
+sys message [contact form]
+
+currentcy
+decimal 
+timezone
+symbol
+date format
+navigation bar color
+fontsize
+primary  button color
+
+user limit
+message
+is email active
+is sms active
+language
+notification position
+
+email address bkend
+email password
+otp option
+
