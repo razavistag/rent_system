@@ -1,12 +1,11 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="dark"
-      dark
-      height="50"
-    >
+    <v-app-bar app color="dark" dark height="50">
       <div class="d-flex align-center">
+        <v-btn to="/" text class="text-decoration-none">
+          <span class="mr-2">Home</span>
+          <v-icon small>mdi-home</v-icon>
+        </v-btn>
         <!-- <v-img
           alt="Vuetify Logo"
           class="shrink mr-2"
@@ -28,13 +27,14 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
+      <v-btn to="/login" text class="text-decoration-none">
         <span class="mr-2">Login</span>
-        <v-icon>mdi-login</v-icon>
+        <v-icon small>mdi-login</v-icon>
+      </v-btn>
+
+      <v-btn to="/firebaseOTP" text class="text-decoration-none">
+        <span class="mr-2">OTP Message</span>
+        <v-icon small>mdi-message</v-icon>
       </v-btn>
     </v-app-bar>
 
@@ -48,7 +48,7 @@
 // import HelloWorld from './components/HelloWorld'
 
 export default {
-  name: 'App',
+  name: "App",
 
   components: {
     // HelloWorld
@@ -57,5 +57,5 @@ export default {
   data: () => ({
     //
   })
-}
+};
 </script>

@@ -1,16 +1,16 @@
 <template>
   <div id="Login">
-    Login Page
+    <v-container>
+      <h1>LOGIN PAGE</h1>
+    </v-container>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Login',
-  mounted () {
-
-  }
-}
+  name: "Login",
+  mounted() {}
+};
 </script>
 
 <style></style>
