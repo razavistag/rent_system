@@ -1,5 +1,5 @@
 <template>
-  <div id="AgileCarousel ">
+  <div id="AgileCarousel">
     <v-row class="m-0">
       <v-col md="12" sm="12" cols="12" class="p-0">
         <agile
@@ -26,7 +26,7 @@
 
 <script>
 export default {
-  name: "AgileCarousel ",
+  name: "AgileCarousel",
 };
 </script>
 

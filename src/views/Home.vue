@@ -57,7 +57,7 @@
 
 <script>
 // @ is an alias to /src
-import Carousel from "../components/AgileCarousel ";
+import Carousel from "../components/AgileCarousel";
 import ContactForm from "../components/ContactForm";
 import Footer from "../components/Footer";
 export default {
