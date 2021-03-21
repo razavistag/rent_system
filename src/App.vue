@@ -22,12 +22,13 @@
     <v-card color="blue lighten-4" class="mt-6  " flat height="" tile>
       <v-toolbar flat tile dens  >
         <v-toolbar-title style="font-size:17px; font-weight:400;">
-          {{ data[0]["site_name"] }}
+         
+          <v-btn text to="/" class="text-decoration-none"> {{ data[0]["site_name"] }}</v-btn>
         </v-toolbar-title>
 
         <v-spacer></v-spacer>
 
-        <v-btn text> Login <v-icon>mdi-login</v-icon> </v-btn>
+        <v-btn text to="login" class="text-decoration-none"> Login <v-icon>mdi-login</v-icon> </v-btn>
       </v-toolbar>
     </v-card>
     
