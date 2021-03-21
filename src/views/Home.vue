@@ -12,7 +12,7 @@
         class="d-flex justify-center align-center mt-3"
       >
         <h3>
-          <span style="color:#46bd55;">TRENDING</span> <span>PROPERTIES</span>
+          <span style="color:#46bd55;">{{ $t("title.one") }}</span> <span>   {{ $t("title.two") }}</span>
         </h3>
       </v-col>
       <v-col
