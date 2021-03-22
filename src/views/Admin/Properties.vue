@@ -5,8 +5,7 @@
     <v-row class="m-0">
       <v-col md="12" cols="12" class="  pa-0 ">
         <v-card flat class="h-25  ma-0 pa-0">
-          
-           <!-- Table Card -->
+          <!-- Table Card -->
           <v-app-bar height="60" tile flat>
             MANAGE PROPERTIES
             <v-spacer></v-spacer>
@@ -57,7 +56,7 @@
             </v-btn>
 
             <!-- add -->
-            <v-btn icon small text>
+            <v-btn icon small text @click="newItem">
               <v-icon small>mdi-plus</v-icon>
             </v-btn>
           </v-app-bar>
@@ -146,10 +145,105 @@
                   mdi-delete
                 </v-icon>
               </v-btn>
- 
             </template>
-          </v-data-table> 
-         
+          </v-data-table>
+
+          <!-- Dialog -->
+          <v-dialog v-model="FormDialog" max-width="90%" persistent>
+            <v-card>
+              <v-card-title class="cyan lighten-4 pt-1 pb-1 pa-0 pl-5 pr-5">
+                <span class="headline">{{ formTitle }}</span>
+                <v-spacer></v-spacer>
+                <v-btn icon text @click="closeFormDialog"
+                  ><v-icon>mdi-close</v-icon></v-btn
+                >
+              </v-card-title>
+              <v-card-text class="  pa-0  ">
+                <v-container class=" pa-0  ma-0">
+                  <!-- form -->
+                  <ValidationObserver ref="form">
+                    <v-row class="pa-0 ma-0 pt-3">
+                      <v-col cols="12" sm="6" md="4" class="pa-0 pl-1">
+                        <ValidationProvider
+                          rules="required|min:5"
+                          name="Propery Name"
+                          v-slot="{ errors }"
+                        >
+                          <v-text-field
+                            v-model="editedItem.PropertyName"
+                            :label="errors[0] ? errors[0] : 'Property Name'"
+                            :error-messages="errors"
+                            dense
+                            hide-details=""
+                          >
+                            <template v-slot:prepend-inner>
+                              <v-icon small>
+                                mdi-pencil
+                              </v-icon>
+                            </template>
+                          </v-text-field>
+                        </ValidationProvider>
+                      </v-col>
+
+                      <v-col cols="12" sm="2" md="2" class="pa-0 pl-1">
+                        <ValidationProvider
+                          rules="required|numeric"
+                          name="Rent Amount"
+                          v-slot="{ errors }"
+                        >
+                          <v-text-field
+                            v-model="editedItem.RentAmount"
+                            :label="errors[0] ? errors[0] : 'Rent Amount'"
+                            :error-messages="errors"
+                            dense
+                            hide-details=""
+                          >
+                            <template v-slot:prepend-inner>
+                              <v-icon small>
+                                mdi-currency-usd
+                              </v-icon>
+                            </template>
+                          </v-text-field>
+                        </ValidationProvider>
+                      </v-col>
+
+                      <v-col cols="12" sm="2" md="2" class="pa-0 pl-1">
+                        <ValidationProvider
+                          rules="required|numeric"
+                          name="Deposit Amount"
+                          v-slot="{ errors }"
+                        >
+                          <v-text-field
+                            class="pa-0"
+                            v-model="editedItem.DepositAmount"
+                            :label="errors[0] ? errors[0] : 'Deposit Amount'"
+                            :error-messages="errors"
+                            dense
+                            hide-details=""
+                          >
+                            <template v-slot:prepend-inner>
+                              <v-icon small>
+                                mdi-currency-usd
+                              </v-icon>
+                            </template>
+                          </v-text-field>
+                        </ValidationProvider>
+                      </v-col>
+                    </v-row>
+                  </ValidationObserver>
+                </v-container>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text>
+                  Cancel
+                </v-btn>
+                <v-btn color="blue darken-1" text>
+                  Save
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-card>
       </v-col>
     </v-row>
@@ -158,11 +252,14 @@
 
 <script>
 import AdminLayout from "../../components/AdminLayout";
+import { ValidationObserver, ValidationProvider } from "vee-validate";
 
 export default {
   name: "Properties",
   components: {
     AdminLayout,
+    ValidationObserver,
+    ValidationProvider,
   },
   data() {
     return {
@@ -174,6 +271,7 @@ export default {
         { option: "option 4" },
       ],
       singleSelect: false,
+      FormDialog: false,
       selected: [],
       search: "",
       headers: [
@@ -195,7 +293,7 @@ export default {
           text: "Name",
           align: "start",
           sortable: true,
-          value: "name",
+          value: "PropertyName",
         },
         {
           text: "Description",
@@ -206,163 +304,170 @@ export default {
         { text: "Actions", value: "actions", sortable: false, width: "12%" },
       ],
       selectedData: [],
+      editedIndex: -1,
+      editedItem: {},
     };
+  },
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "New Property" : "Edit Property";
+    },
   },
   mounted() {
     this.products = [
       {
         id: 1,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 2,
-        name: "bcd",
+        PropertyName: "bcd",
         description: "example description",
         state: "active",
       },
       {
         id: 3,
-        name: "efg",
+        PropertyName: "efg",
         description: "example description",
         state: "pending",
       },
       {
         id: 4,
-        name: "bcd",
+        PropertyName: "bcd",
         description: "example description",
         state: "active",
       },
       {
         id: 5,
-        name: "efg",
+        PropertyName: "efg",
         description: "example description",
         state: "pending",
       },
       {
         id: 6,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 7,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 8,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 9,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 10,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 11,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 12,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 13,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 14,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 15,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 16,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 17,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 18,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 19,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 20,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 21,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 22,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 23,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 24,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 25,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
       {
         id: 26,
-        name: "abc",
+        PropertyName: "abc",
         description: "example description",
         state: "pending",
       },
@@ -372,6 +477,19 @@ export default {
     selectedCheckbox(i) {
       this.selectedData.push(i);
       console.log(this.selectedData);
+    },
+    closeFormDialog() {
+      this.FormDialog = false;
+    },
+    newItem() {
+      this.FormDialog = true;
+    },
+    editItem(item) {
+      console.log(item);
+
+      this.editedIndex = this.products.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.FormDialog = true;
     },
   },
 };
