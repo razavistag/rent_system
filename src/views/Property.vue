@@ -1,5 +1,8 @@
 <template>
   <div id="Property">
+    <!-- App bar Component -->
+    <Appbar />
+    <div itemid="wrap_container">
     <v-container id="container">
       <v-row>
         <v-col md="12" sm="12" cols="12">
@@ -115,6 +118,7 @@
         </v-col>
       </v-row>
     </v-container>
+    </div>
     <Footer />
   </div>
 </template>
@@ -122,12 +126,14 @@
 <script>
 import PropertyCarousel from "../components/PropertyCarousel";
 import Footer from "../components/Footer";
+import Appbar from "../components/Appbar";
 
 export default {
   name: "Property",
   components: {
     PropertyCarousel,
     Footer,
+    Appbar,
   },
   data() {
     return {
@@ -177,12 +183,16 @@ export default {
 
 <style lang="css" scoped>
 #Property {
-  margin-top: -30px;
   background-color: #dcedc8;
+
+}
+#wrap_container{
+ margin-top: -30px;
   padding: 10px;
 }
 #container {
   background-color: white;
+ 
 }
 
 .agile {

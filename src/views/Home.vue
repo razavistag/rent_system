@@ -1,5 +1,8 @@
 <template>
   <div class="home">
+    <!-- App bar Component -->
+    <Appbar/>
+    
     <!-- Carousel Image Component-->
     <Carousel style="margin-top:-25px;" />
 
@@ -57,12 +60,14 @@
 
 <script>
 // @ is an alias to /src
+import Appbar from "../components/Appbar";
 import Carousel from "../components/AgileCarousel";
 import ContactForm from "../components/ContactForm";
 import Footer from "../components/Footer";
 export default {
   name: "Home",
   components: {
+    Appbar,
     Carousel,
     ContactForm,
     Footer,
