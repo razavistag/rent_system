@@ -37,7 +37,7 @@
       <v-toolbar flat tile dens>
         <v-toolbar-title style="font-size:17px; font-weight:400;">
           <v-btn text to="/" class="text-decoration-none">
-            {{ data[0]["site_name"] }}</v-btn
+            {{ data[0]["site_name"].substring(0,18) + '...' }}</v-btn
           >
         </v-toolbar-title>
 

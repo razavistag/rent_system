@@ -74,14 +74,14 @@
             </v-avatar>
 
             <v-btn
-              color="white"
+              color="red"
               dark
               class="text-decoration-none"
               icon
               text
-              to="/"
+              @click="LogoutConfirmatioDialog = true"
             >
-              <v-icon>mdi-logout</v-icon>
+              <v-icon>mdi-power-standby</v-icon>
             </v-btn>
           </template>
 
@@ -183,6 +183,33 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
+
+    <!-- Logout confirmation -->
+    <v-row justify="center">
+      <v-dialog v-model="LogoutConfirmatioDialog" persistent max-width="350">
+        <v-card>
+          <v-card-title class="headline blue-grey lighten-2 white--text">
+            LOGOUT CONFIMRATION
+          </v-card-title>
+          <v-card-text class="pa-5">
+            <p>Are you sure do you want to logout?</p>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="green darken-1"
+              text
+              @click="LogoutConfirmatioDialog = false"
+            >
+              Stay In
+            </v-btn>
+            <v-btn color="red darken-1" text @click="Logout">
+              Logout
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </div>
 </template>
 
@@ -200,6 +227,7 @@ export default {
   data() {
     return {
       data: [],
+      LogoutConfirmatioDialog: false,
       online: true,
       menu: false,
       calculator: false,
@@ -254,6 +282,10 @@ export default {
     openDrawer() {
       this.drawer = !this.drawer;
       this.dawerHover = !this.dawerHover;
+    },
+    Logout() {
+      localStorage.removeItem("Key");
+      this.$router.push({ path: "/" });
     },
   },
 };
