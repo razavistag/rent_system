@@ -412,7 +412,7 @@
                         </ValidationProvider>
                       </v-col>
 
-                      <v-col cols="12" sm="6" md="3" class=" pl-3">
+                      <v-col cols="12" sm="6" md="6" class="pl-3">
                         <!-- <ValidationProvider
                           rules="required"
                           name="image"
@@ -435,7 +435,7 @@
                           name="image"
                           v-slot="{ errors }"
                         >
-                        <!-- :dragText="errors[0] ? errors[0] : 'Upload Images'" -->
+                          <!-- :dragText="errors[0] ? errors[0] : 'Upload Images'" -->
                           <vue-upload-multiple-image
                             :error-messages="errors"
                             :dragText="'Upload Image'"
@@ -498,6 +498,7 @@
                           </v-btn>
                         </v-col>
                       </v-col>
+
                       <!-- 
                       <v-card class="mx-auto" max-width="300" tile>
                         <v-list flat>
@@ -850,14 +851,26 @@ export default {
       //   console.log(response)
       // })
     },
-    beforeRemove(index, done, fileList) {
-      console.log("index", index, fileList);
-      var r = confirm("remove image");
-      if (r == true) {
+    beforeRemove(index, done, fileList, Boolen) {
+      console.log("index", index, fileList, Boolen);
+      console.log("delete triggered");
+
+      if (Boolen == "true") {
+        console.log("delete");
         done();
       } else {
+        console.log("none");
       }
     },
+    // beforeRemove(index, done, fileList) {
+    //   console.log("index", index, fileList);
+    //   var r = confirm("remove image");
+    //   if (r == true) {
+    //     done();
+    //   } else {
+    //   }
+    // },
+
     editImage(formData, index, fileList) {
       console.log("edit data", formData, index, fileList);
     },
@@ -877,6 +890,6 @@ export default {
 .form-dialog {
   align-self: flex-start;
   position: relative;
-  top: 50px;
+  top: 20px;
 }
 </style>

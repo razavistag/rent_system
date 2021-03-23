@@ -118,10 +118,13 @@
               ></path>
             </svg>
           </div>
+
+          <!-- single Image Preview -->
           <div class="show-image centered">
             <img class="show-img img-responsive" :src="imagePreview" />
           </div>
         </div>
+
         <div
           class="image-bottom display-flex position-absolute full-width align-items-center justify-content-between"
           :class="!showPrimary && 'justify-content-end'"
@@ -131,8 +134,6 @@
             v-if="showPrimary"
           >
             <div class="display-flex align-items-center" v-show="imageDefault">
-
-              <v-btn icon> <v-icon size="20">mdi-crop</v-icon></v-btn>
               <!-- <span class="image-primary display-flex align-items-center">
                 <svg
                   class="image-icon-primary"
@@ -182,7 +183,49 @@
               >{{ markIsPrimaryText }}</a
             >
           </div>
+
           <div class="display-flex">
+            <v-btn icon @click="cropDialogOpener(images[currentIndexImage])">
+              <v-icon size="20">mdi-crop</v-icon>
+            </v-btn>
+
+            <!-- Crop Dialog -->
+            <v-dialog v-model="cropDialog" width="500" persistent>
+              <v-card>
+                <v-card-title class="headline grey lighten-2">
+                  CROP IMAGE
+                  <v-spacer></v-spacer>
+                  <v-icon @click="cropDialog = false">mdi-close</v-icon>
+                </v-card-title>
+
+                <v-card-text class="pa-2">
+                  <Cropper
+                    :src="currentCropperImage"
+                    @change="change"
+                    :stencil-props="{
+                      movable: true,
+                      scalable: true,
+                      aspectRatio: 1,
+                    }"
+                  >
+                  </Cropper>
+                </v-card-text>
+                <v-divider></v-divider>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue" text>
+                    CANCEL
+                  </v-btn>
+                  <v-btn
+                    color="success"
+                    text
+                    @click="CropImage(images[currentIndexImage])"
+                  >
+                    CROP
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
             <label
               v-if="showEdit"
               class="image-edit display-flex cursor-pointer ma-1 pa-0 "
@@ -242,6 +285,7 @@
         :key="index"
         @click="changeHighlight(index)"
       >
+        <!-- mini Image near to add button -->
         <div class="centered">
           <img class="show-img img-responsive" :src="image.path" />
         </div>
@@ -301,6 +345,32 @@
       :showCaption="false"
     >
     </vue-image-lightbox-carousel>
+
+    <!-- remove image dialog -->
+    <v-dialog v-model="removeImageDialog" persistent max-width="450">
+      <!-- <template v-slot:activator="{ on, attrs }">
+            <v-btn color="primary" dark v-bind="attrs" v-on="on">
+              Open Dialog
+            </v-btn>
+          </template> -->
+      <v-card>
+        <v-card-title class="headline blue lighten-2">
+          Deleting Confirmation
+        </v-card-title>
+        <v-card-text class="pa-3">
+          ARE YOU SURE, DO YOU WANT REMOVE THIS IMAGE?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue" text @click="removeImageDialog = false">
+            CANCEL
+          </v-btn>
+          <v-btn color="red" text @click="removeImage(currentIndexImage)">
+            DELETE
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -309,6 +379,8 @@ import { forEach, findIndex, orderBy, cloneDeep } from "lodash";
 import Popper from "vue-popperjs";
 import "vue-popperjs/dist/css/vue-popper.css";
 import VueImageLightboxCarousel from "vue-image-lightbox-carousel";
+import { Cropper } from "vue-advanced-cropper";
+import "vue-advanced-cropper/dist/style.css";
 export default {
   name: "VueUploadMultipleImage",
 
@@ -389,15 +461,22 @@ export default {
       isDragover: false,
       showLightbox: false,
       arrLightBox: [],
+      cropDialog: false,
+      cropped: "",
+      currentCropperImage: "",
+      removeImageDialog: false,
+      removeImageConfirmedState: false,
     };
   },
   components: {
     Popper,
     VueImageLightboxCarousel,
+    Cropper,
   },
   computed: {
     imagePreview() {
       let index = findIndex(this.images, { highlight: 1 });
+      this.currentImage = this.images[this.currentIndexImage].path;
       if (index > -1) {
         return this.images[index].path;
       } else {
@@ -411,6 +490,30 @@ export default {
     },
   },
   methods: {
+    change({ coordinates, canvas }) {
+      // console.log(coordinates, canvas);
+      // console.log(this.images[this.currentIndexImage].path)
+      this.cropped = canvas.toDataURL();
+      // console.log(canvas.toDataURL());
+    },
+    CropImage(i) {
+      console.log(i);
+      console.log(this.images);
+      // this.images.splice(i, 1);
+      this.images.find((file) => {
+        if (file.path === i.path) {
+          file.path = this.cropped;
+        }
+      });
+      console.log(" path updated");
+      console.log(this.images);
+      this.cropDialog = false;
+    },
+    cropDialogOpener(e) {
+      console.log(e);
+      this.cropDialog = true;
+      this.currentCropperImage = e.path;
+    },
     preventEvent(e) {
       e.preventDefault();
       e.stopPropagation();
@@ -506,6 +609,7 @@ export default {
       }
     },
     editFieldChange(e) {
+      // console.log(e);
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) {
         return false;
@@ -550,6 +654,7 @@ export default {
       this.$emit("mark-is-primary", currentIndex, this.images);
     },
     deleteImage(currentIndex) {
+      this.removeImageDialog = true;
       this.$emit(
         "before-remove",
         currentIndex,
@@ -563,8 +668,28 @@ export default {
             this.images[0].highlight = 1;
           }
         },
-        this.images
+        this.images,
+        "false"
       );
+    },
+    removeImage(currentIndex) {
+      this.$emit(
+        "before-remove",
+        currentIndex,
+        () => {
+          if (this.images[currentIndex].default === 1) {
+            this.images[0].default = 1;
+          }
+          this.images.splice(currentIndex, 1);
+          this.currentIndexImage = 0;
+          if (this.images.length) {
+            this.images[0].highlight = 1;
+          }
+        },
+        this.images,
+        "true"
+      );
+      this.removeImageDialog = false;
     },
     openGallery(index) {
       this.showLightbox = true;
@@ -662,11 +787,13 @@ export default {
   display: block;
 }
 .image-container {
-  width: 190px;
+  /* width: 190px; */
+  width: 100%;
   height: 180px;
   border: 1px dashed #d6d6d6;
   border-radius: 4px;
   background-color: #fff;
+  /* background-color: red; */
 }
 .image-center {
   width: 100%;
@@ -804,7 +931,8 @@ export default {
   fill: #222;
 }
 .image-list-container {
-  max-width: 190px;
+  /* max-width: 190px; */
+  max-width: 100%;
   min-height: 50px;
   margin-top: 10px;
 }
@@ -817,6 +945,8 @@ export default {
 .image-list-container .image-list-item:not(:last-child) {
   margin-right: 5px;
   margin-bottom: 5px;
+  /* background-color: red; */
+  /* padding: 10px; */
 }
 .image-list-container .image-list-item .show-img {
   max-width: 25px;
@@ -862,5 +992,11 @@ export default {
 <style lang="css">
 .popper-custom .popper__arrow {
   border-color: #000 transparent transparent transparent !important;
+}
+.cropPreview {
+  position: absolute;
+  bottom: 70px;
+  right: 8px;
+  border: #fff solid 2px;
 }
 </style>
