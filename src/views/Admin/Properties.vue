@@ -164,7 +164,7 @@
                   ><v-icon>mdi-close</v-icon></v-btn
                 >
               </v-card-title>
-              <v-card-text class="  pa-0  ">
+              <v-card-text class="  pa-0  h-100  h-75">
                 <v-container class="  ma-0">
                   <!-- form -->
                   <ValidationObserver ref="form">
@@ -417,7 +417,7 @@
                           rules="required"
                           name="image"
                           v-slot="{ errors }"
-                        > -->
+                        >
                         <v-file-input
                           truncate-length="15"
                           :error-messages="errors"
@@ -428,7 +428,33 @@
                           @change="onImageUpload($event)"
                           :label="errors[0] ? errors[0] : 'Upload Images'"
                         ></v-file-input>
-                        <!-- </ValidationProvider> -->
+                        </ValidationProvider> -->
+
+                        <ValidationProvider
+                          rules="required"
+                          name="image"
+                          v-slot="{ errors }"
+                        >
+                        <!-- :dragText="errors[0] ? errors[0] : 'Upload Images'" -->
+                          <vue-upload-multiple-image
+                            :error-messages="errors"
+                            :dragText="'Upload Image'"
+                            :errorFound="errors[0]"
+                            browseText="Drag or Browse"
+                            primaryText="Added"
+                            markIsPrimaryText=""
+                            :showPrimary="true"
+                            v-model="imageSelected"
+                            :maxImage="10"
+                            popupText=" "
+                            dropText="Drag Here"
+                            @upload-success="uploadImageSuccess"
+                            @before-remove="beforeRemove"
+                            @edit-image="editImage"
+                            @data-change="dataChange"
+                            :data-images="images"
+                          ></vue-upload-multiple-image>
+                        </ValidationProvider>
                       </v-col>
 
                       <v-col
@@ -526,13 +552,14 @@
 <script>
 import AdminLayout from "../../components/AdminLayout";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
-
+import VueUploadMultipleImage from "../../components/VueUploadMultipleImage";
 export default {
   name: "Properties",
   components: {
     AdminLayout,
     ValidationObserver,
     ValidationProvider,
+    VueUploadMultipleImage,
   },
   data() {
     return {
@@ -583,7 +610,8 @@ export default {
       editedItem: {},
       defaultItem: {},
       images_arr: [],
-      img: "",
+      images: [],
+      imageSelected: "",
     };
   },
   computed: {
@@ -814,6 +842,28 @@ export default {
         });
       });
     },
+    uploadImageSuccess(formData, index, fileList) {
+      console.log("data", formData, index, fileList);
+      this.imageSelected = true;
+      // Upload image api
+      // axios.post('http://your-url-upload', { data: formData }).then(response => {
+      //   console.log(response)
+      // })
+    },
+    beforeRemove(index, done, fileList) {
+      console.log("index", index, fileList);
+      var r = confirm("remove image");
+      if (r == true) {
+        done();
+      } else {
+      }
+    },
+    editImage(formData, index, fileList) {
+      console.log("edit data", formData, index, fileList);
+    },
+    dataChange(data) {
+      console.log(data);
+    },
   },
 };
 </script>
@@ -827,6 +877,6 @@ export default {
 .form-dialog {
   align-self: flex-start;
   position: relative;
-  top: 90px;
+  top: 50px;
 }
 </style>
