@@ -6,6 +6,8 @@ import Property from "../views/Property.vue";
 
 import Dashboard from "../views/Admin/Dashboard.vue";
 import Manage_Properties from "../views/Admin/Properties.vue";
+import Test from "../views/Admin/Test.vue";
+
 
 Vue.use(VueRouter);
 
@@ -51,8 +53,8 @@ const routes = [
   },
   {
     path: "/manage_properties",
-    name: "Manage_Properties",
-    component: Manage_Properties,
+    name: "Test",
+    component: Test,
     beforeEnter: (to, from, next) => {
       if (localStorage.getItem("Key") != "access_token") {
         router.push({ path: "login" });

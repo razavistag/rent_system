@@ -385,6 +385,9 @@ export default {
   name: "VueUploadMultipleImage",
 
   props: {
+    clear: {
+      type: Array,
+    },
     errorFound: {
       type: String,
     },
@@ -720,6 +723,12 @@ export default {
     },
   },
   mounted() {
+    console.log(this.$props.clear);
+    // if ((this.$props.Clear = "clearDrop")) {
+    //   console.log("clear drop");
+    // } else {
+    //   console.log("edit drop");
+    // }
     document.body.addEventListener("dragleave", (event) => {
       event.stopPropagation();
       event.preventDefault();
