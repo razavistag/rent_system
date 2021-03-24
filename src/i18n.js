@@ -9,12 +9,16 @@ export default new VueI18n({
         one: "TRENDING",
         two: "PROPERTIES",
       },
+      calories: "calories",
     },
     Belarusian: {
       title: {
         one: "Тэндэнцыйныя ",
         two: "ўласцівасці",
       },
+      calories: "ўласцівасці",
+      fat: "ўлаі",
+
     },
   },
 });

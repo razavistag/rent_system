@@ -51,10 +51,21 @@ const routes = [
       next();
     },
   },
-  {
+  // {
+  //   path: "/manage_properties",
+  //   name: "Test",
+  //   component: Test,
+  //   beforeEnter: (to, from, next) => {
+  //     if (localStorage.getItem("Key") != "access_token") {
+  //       router.push({ path: "login" });
+  //     }
+  //     next();
+  //   },
+  // },
+   {
     path: "/manage_properties",
-    name: "Test",
-    component: Test,
+    name: "Manage_Properties",
+    component: Manage_Properties,
     beforeEnter: (to, from, next) => {
       if (localStorage.getItem("Key") != "access_token") {
         router.push({ path: "login" });
