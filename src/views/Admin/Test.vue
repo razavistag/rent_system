@@ -842,7 +842,7 @@ export default {
       this.cropDialog = true;
       this.currentCropperImage = e.path;
     },
-    openGallery(index) {
+    openGallery(index) {   
       this.showLightbox = true;
       this.$refs.lightbox.showImage(index);
     },
